@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy
 import sys
+import os
 import argparse
 import functools
+import random
+import statsmodels.api as sm
 from bitarray import bitarray
 
 
@@ -36,12 +40,14 @@ def pack_bits(bits, bit_width=1, dtype='int', big_endian=True):
     return ret
 
 
-def plot_hist(args):
+def analyze_rng(args):
 
     bit_width = args.bit_width
     file = args.FILE
-    save_fig_file = args.save_fig
+    file_without_ext = os.path.splitext(file)[0]
     file_format = args.file_format
+
+
     x = None
 
     with open(file, 'rb' if file_format == 'bin' else 'r') as f:
@@ -67,12 +73,40 @@ def plot_hist(args):
         else:
             x = pack_bits(b, bit_width=bit_width)
 
-    bins = 2**bit_width
-    plt.hist(x, bins=bins)
-    if save_fig_file == '':
+    if args.plot_histogram:
+        plt.figure()
+        plt.title('Histogram')
+
+        bins = 2**bit_width
+        plt.hist(x, bins=bins)
+        if args.save_fig:
+            plt.savefig(file_without_ext+'_hist.png')
+
+    if args.plot_time_series:
+        plt.figure()
+        plt.title('Time series (part)')
+
+        start = random.randint(0, (len(x) - 200))
+        plt.plot(np.arange(start, start+200), x[start:start+200])
+        if args.save_fig:
+            plt.savefig(file_without_ext+'_time_series.png')
+
+    if args.plot_psd:
+        plt.figure()
+        plt.title('PSD')
+        plt.psd(x, NFFT=1024)
+        if args.save_fig:
+            plt.savefig(file_without_ext+'_psd.png')
+
+    if args.plot_acf:
+        plt.figure()
+        plt.title('ACF')
+        plt.plot(sm.tsa.acf(x))
+        if args.save_fig:
+            plt.savefig(file_without_ext+'_acf.png')
+
+    if args.show:
         plt.show()
-    else:
-        plt.savefig(save_fig_file)
 
 
 def main(args):
@@ -103,18 +137,23 @@ if __name__ == '__main__':
             required=True,
             parser_class=type(parser))
 
-    parser_plot_hist = subparsers.add_parser('plot_hist',
-            help='plot histogram of a random sequence, parsing as W-bit number (big-endian)')
-    parser_plot_hist.add_argument('FILE', default='test.bin',
+    p1 = subparsers.add_parser('analyze_rng',
+            help='analyze a random bit sequence, parsing as W-bit number (big-endian)')
+    p1.add_argument('FILE', default='test.bin',
             help='inputted random sequence file')
-    parser_plot_hist.add_argument('--save_fig', metavar='IMAGE_NAME', default='',
-            help='save fig as image')
-    parser_plot_hist.add_argument('--bit_width', metavar='W', type=int, default=4,
+    p1.add_argument('--plot_time_series', action='store_true')
+    p1.add_argument('--plot_histogram', action='store_true')
+    p1.add_argument('--plot_psd', action='store_true')
+    p1.add_argument('--plot_acf', action='store_true')
+    p1.add_argument('--show', action='store_true', help='show figures (by default plt.show() is not called)')
+    p1.add_argument('--save_fig', action='store_true',
+            help='save figures when ploting')
+    p1.add_argument('--bit_width', metavar='W', type=int, default=4,
             help='random bit sequence will be viewed as W-bit number sequence (big-endian)')
-    parser_plot_hist.add_argument('--file_format', default='bin',
+    p1.add_argument('--file_format', default='bin',
             choices=['bin', 'plain_hex_dump', 'bit_dump'],
             help='bin: binary file; plain_hex_dump: txt files, see outputs of xxd -p; bit_dump: txt files, see outputs of xxd -b')
-    parser_plot_hist.set_defaults(func=plot_hist)
+    p1.set_defaults(func=analyze_rng)
 
     args = parser.parse_args()
     if hasattr(args, 'func'):
