@@ -27,7 +27,7 @@ for dname in 'AlgorithmTesting BBS CCG G-SHA1 LCG MODEXP MS QCG1 QCG2 XOR'.split
     for dname_sub in 'Frequency BlockFrequency Runs LongestRun Rank FFT NonOverlappingTemplate OverlappingTemplate Universal LinearComplexity Serial ApproximateEntropy CumulativeSums RandomExcursions RandomExcursionsVariant'.split():
         p = os.path.join('experiments', dname, dname_sub)
         if not os.path.exists(p):
-            os.makedirs()
+            os.makedirs(p)
 
 print(f'Assessing {num_of_seq} sequences, each sequence has {SEQ_LEN} bits\n')
 
