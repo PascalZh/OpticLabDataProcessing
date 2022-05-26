@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import matplotlib.pyplot as plt
 import numpy as np
-import scipy
-import sys
 import os
 import argparse
 import functools
@@ -22,7 +20,7 @@ def read_osc_data(filename):
         return np.array([float(x) for x in f.read().splitlines()])
 
 
-def pack_bits(bits, bit_width=1, dtype='int', big_endian=True):
+def pack_bits(bits: bytes, bit_width=1, dtype='int', big_endian=True):
     """Notice: ensure a variable of dtype can contain any integer number of width `bit_width`"""
     ba = bitarray()
     ba.frombytes(bits)
@@ -59,7 +57,7 @@ def analyze_rng(args):
             ba = bitarray(b)
             b = ba.tobytes()
 
-        trunc_len = len(b) // bit_width * bit_width
+        trunc_len = len(b) // bit_width * bit_width  # truncate to a multiple of bit_width bits, so that np.frombuffer and pack_bits work properly
         b = b[:trunc_len]
 
         if bit_width == 8:
