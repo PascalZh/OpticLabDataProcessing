@@ -25,7 +25,7 @@ def calculate_bias(x_bytes):
 
     for i in range(N):
         for j in range(8):
-            cnt[j] += ba[i*8+j]
+            cnt[j] += ba[i*8+7-j]
 
     cnt /= N
     cnt = np.abs(cnt - 0.5)
@@ -35,7 +35,12 @@ def calculate_bias(x_bytes):
 def plot_bias(ax, x_bytes, label=None):
     cnt = calculate_bias(x_bytes)
     print(f'label: {label}, cnt = {cnt}')
-    ax.plot(cnt, label=label)
+    ax.plot(range(1,9), cnt, label=label)
     ax.set_yscale('log')
     ax.set_title('Bias for every bits')
     ax.legend(fontsize=6)
+
+
+def H_min(pdf):
+    """Unit: bit"""
+    return -np.log2(np.max(pdf))

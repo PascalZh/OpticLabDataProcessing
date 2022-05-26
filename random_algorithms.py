@@ -65,7 +65,7 @@ def delayed_reversed_xor_then_mLSB(x, delay=101, m=4):
         res = [ba[i*8+j] ^ ba[i_*8+7-j] for j in range(8)]
 
         for j in range(m):
-            ba_ret.append(res[j])
+            ba_ret.append(res[7-j])
 
     return np.frombuffer(ba_ret.tobytes(), dtype='uint8')
 

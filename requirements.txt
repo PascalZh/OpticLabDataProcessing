@@ -1,4 +1,5 @@
 statsmodels
 bitarray
+termcolor
 numpy
 matplotlib
