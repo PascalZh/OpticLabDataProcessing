@@ -17,25 +17,25 @@ def generate_cdf(x):
     return np.vectorize(cdf)
 
 
-def calculate_bias(x_bytes):
+def calculate_biases(x_bytes):
     ba = bitarray()
     ba.frombytes(x_bytes)
     N = len(ba)//8
-    cnt = np.array([0 for _ in range(8)], dtype=float)
+    biases = np.array([0 for _ in range(8)], dtype=float)
 
     for i in range(N):
         for j in range(8):
-            cnt[j] += ba[i*8+7-j]
+            biases[j] += ba[i*8+7-j]
 
-    cnt /= N
-    cnt = np.abs(cnt - 0.5)
-    return cnt
+    biases /= N
+    biases = np.abs(biases - 0.5)
+    return biases
 
 
-def plot_bias(ax, x_bytes, label=None):
-    cnt = calculate_bias(x_bytes)
-    print(f'label: {label}, cnt = {cnt}')
-    ax.plot(range(1,9), cnt, label=label)
+def plot_biases(ax, x_bytes, label=None):
+    biases = calculate_biases(x_bytes)
+    print(f'cnt = {biases}')
+    ax.plot(range(1,9), biases, label=label)
     ax.set_yscale('log')
     ax.set_title('Bias for every bits')
     ax.legend(fontsize=6)

@@ -94,3 +94,32 @@ def subtract_delayed(x, delay):
 
 def diff_delayed_reversed_xor(x):
     return delayed_reversed_xor(np.diff(x))
+
+def subtract_delayed(x):
+    delays = [0, 137, 487, 547, 1321, 1559, 2531, 61, 2161, 829, 1487, 647, 887, 3373, 2879, 3413, 457, 23]
+    ba_ret = bitarray()
+
+    for i in range(7549, len(x)):
+        res = [np.uint8(0) for j in range(8)]
+        # for j in range(8):
+            # print(ba[i*8+j], end=' ')
+        # print()
+        # for j in range(8):
+            # print(ba[i_*8+j], end=' ')
+        # print()
+
+        for j in range(8):
+            # print(f'{c1[j]:08b}, {c2[j]:08b}')
+
+            res[j] = (((x[i-delays[2*j]] - x[i-delays[2*j+1]]) % (2 ** (j+1))) >> j) & 1
+            # print(f'{c1[j] - c2[j]:08b} {res[j]:08b}')
+        # print()
+
+        # for j in range(8):
+            # print(res[7-j], end=' ')
+        # print()
+
+        for j in range(8):
+            ba_ret.append(res[7-j])
+
+    return np.frombuffer(ba_ret.tobytes(), dtype='uint8')
