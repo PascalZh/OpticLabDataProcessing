@@ -9,8 +9,7 @@ import statsmodels.api as sm
 import sys
 import os
 import time
-sys.path.append('./random')
-from random_toolbox import load_bit_sequence, parse_bit_sequence, pack_bits
+from generated.random_toolbox import load_bit_sequence, parse_bit_sequence, pack_bits
 
 from bitarray import bitarray
 
