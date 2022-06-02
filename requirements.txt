@@ -4,4 +4,3 @@ termcolor
 numpy
 matplotlib
 PyQt5
-PyQt5-tools

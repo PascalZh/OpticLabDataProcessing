@@ -29,7 +29,7 @@ class Ui_RandomToolboxMainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.groupBox.sizePolicy().hasHeightForWidth())
         self.groupBox.setSizePolicy(sizePolicy)
-        self.groupBox.setMaximumSize(QtCore.QSize(300, 16777215))
+        self.groupBox.setMaximumSize(QtCore.QSize(400, 16777215))
         self.groupBox.setObjectName("groupBox")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.groupBox)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -79,7 +79,7 @@ class Ui_RandomToolboxMainWindow(object):
 
     def retranslateUi(self, RandomToolboxMainWindow):
         _translate = QtCore.QCoreApplication.translate
-        RandomToolboxMainWindow.setWindowTitle(_translate("RandomToolboxMainWindow", "MainWindow"))
+        RandomToolboxMainWindow.setWindowTitle(_translate("RandomToolboxMainWindow", "Random Toolbox"))
         self.groupBox.setTitle(_translate("RandomToolboxMainWindow", "Plot"))
         self.pushButton_OpenFile.setText(_translate("RandomToolboxMainWindow", "Open File"))
         self.label.setText(_translate("RandomToolboxMainWindow", "Bit Width"))
